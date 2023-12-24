@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Toe Game</title>
+    <style>
+         body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+
+    #board {
+      display: inline-block;
+      margin-top: 20px;
+    }
+
+    .cell {
+      width: 100px;
+      height: 100px;
+      font-size: 40px;
+      border: 1px solid #ccc;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .row:after {
+      content: "";
+      display: block;
+      clear: both;
+    }
+    .resBtn{
+        width: 200px;
+        height: 50px;
+        background-color: red;
+        color: white;
+       
+    }
+    </style>
+</head>
+<body>
+    <h1>Tic Tac Toe</h1>
+
+<div id="board">
+  <div class="row">
+    <div class="cell" onclick="cellClick(0)"></div>
+    <div class="cell" onclick="cellClick(1)"></div>
+    <div class="cell" onclick="cellClick(2)"></div>
+  </div>
+  <div class="row">
+    <div class="cell" onclick="cellClick(3)"></div>
+    <div class="cell" onclick="cellClick(4)"></div>
+    <div class="cell" onclick="cellClick(5)"></div>
+  </div>
+  <div class="row">
+    <div class="cell" onclick="cellClick(6)"></div>
+    <div class="cell" onclick="cellClick(7)"></div>
+    <div class="cell" onclick="cellClick(8)"></div>
+  </div>
+</div>
+
+<p id="result"></p>
+<center>
+<button class="resBtn" id="restartBtn" onclick="restartGame()" style="display: none;">Restart Game</button></center>
+<script>
+    let currentPlayer = 'X';
+  let moves = 0;
+  let gameEnded = false;
+  const cells = document.querySelectorAll('.cell');
+  const resultDisplay = document.getElementById('result');
+
+  function checkWinner() {
+    const winningCombos = [
+      [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+      [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+      [0, 4, 8], [2, 4, 6] // Diagonals
+    ];
+
+    for (const combo of winningCombos) {
+      const [a, b, c] = combo;
+      if (cells[a].textContent !== '' &&
+          cells[a].textContent === cells[b].textContent &&
+          cells[a].textContent === cells[c].textContent) {
+        return true;
+      }
+    }
+    return false;
+  }
+  function restartGame() {
+    // Clear the board
+    cells.forEach(cell => cell.textContent = '');
+    resultDisplay.textContent = '';
+
+    // Reset game state
+    currentPlayer = 'X';
+    moves = 0;
+    gameEnded = false;
+
+    // Hide restart button
+    restartBtn.style.display = 'none';
+  }
+  function cellClick(index) {
+    if (gameEnded || cells[index].textContent !== '') {
+      return;
+    }
+
+    cells[index].textContent = currentPlayer;
+    moves++;
+
+    if (checkWinner()) {
+      resultDisplay.textContent = `Player ${currentPlayer} wins!`;
+      gameEnded = true;
+      showRestartButton();
+    } else if (moves === 9) {
+      resultDisplay.textContent = 'It\'s a draw!';
+      gameEnded = true;
+      showRestartButton();
+    } else {
+      currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+    }
+  }
+  function showRestartButton() {
+    // Show the restart button when the game ends
+    restartBtn.style.display = 'block';
+  }
+</script>
+</body>
+</html>
